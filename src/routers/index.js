@@ -61,10 +61,10 @@ const routers = [
   },
 ];
 const configRouter = (app) => {
-  routers.forEach(item => {
-    app.use('/', router[item.method](item.path,
+  routers.forEach(router => {
+    app[router.method](router.path,
       async (req, res, next) => {
-        if (!['/login', '/signup'].includes(item.path)) {
+        if (!['/login', '/signup'].includes(router.path)) {
           req.userData = await LoginController.getUser(req.headers.authorization);
           if (!req.userData) {
             res.status(401).send('Authorization');
@@ -76,9 +76,8 @@ const configRouter = (app) => {
         }
       },
       (req, res, next) => {
-        return item.handle(req, res, next, req.userData);
-      }
-    ))
-  })
+        return router.handle(req, res, next, req.userData);
+      });
+    })
 };
 module.exports = configRouter;

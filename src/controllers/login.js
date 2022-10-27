@@ -11,10 +11,12 @@ class LoginController {
         res.status(200).json(data);
         return true;
       }
-      const err = new Error();
-      err.status = 401;
-      err.message = 'username or password wrong !!!!'
-      next(err);
+      res.status(401).json({
+        error: {
+          message: 'username or password wrong !!!!'
+        }
+      });
+      return false;
     } catch (error) {
       next(error);
     }
