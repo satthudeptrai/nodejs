@@ -1,4 +1,4 @@
-const { getToken, parseToken } = require('../ulti/token');
+const { getToken, parseToken } = require('../utils/token');
 const LoginModel = require('../models/loginModel');
 class LoginController {
   login = async (req, res, next) => {
