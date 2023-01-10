@@ -1,28 +1,18 @@
-const express = require('express');
-const configRouter = require('./routers/index');
-const connect = require('./config/db/index')
-const app = express();
-app.use(express.urlencoded({
-  extended: true
-}));
-app.use(express.json());
-configRouter(app);
-connect();
-app.use((req, res, next) => {
-  try {
-    const err = new Error('Not Found');
-    err.status = 404;
-    next(err);
-  } catch (error) {
-    next(error);
-  }
-})
-app.use((err, req, res, next) => {
-  console.log('err', err)
-  return res.status(err.status || 500).json({
-    error: err.status,
-    message: err.message
-  })
-})
-
-app.listen(3000);
+const { connect, disconnect } = require('./config/db/index');
+const setup = require('./config/request');
+const EndusersController = require('./controllers/endusers');
+const BeneficiariesController = require('./controllers/beneficiaries');
+const CardController = require('./controllers/cards');
+const LedgerController = require('./controllers/ledgers');
+const TransactionsController = require('./controllers/transactions');
+const traferData = async () => {
+  await setup();
+  await connect();
+  // await EndusersController.tranferData();
+  // await BeneficiariesController.tranferData();
+  // await CardController.tranferData();
+  // await LedgerController.tranferData();
+  await TransactionsController.tranferData();
+  await disconnect();
+};
+traferData();
